@@ -39,5 +39,4 @@ public class MetroCardBank {
         }
         return buf.toString();
     }
-
 }
