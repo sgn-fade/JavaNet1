@@ -1,6 +1,8 @@
 package tcpWork;
 
-public class MetroCard {
+import java.io.Serializable;
+
+public class MetroCard implements Serializable {
     private String serNum;
     private User usr;
     private String colledge;

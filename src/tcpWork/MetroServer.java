@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class MetroServer extends Thread{
+public class MetroServer extends Thread {
     MetroCardBank bank;
     private ServerSocket serverSocket = null;
     private int port = -1;
@@ -19,6 +19,7 @@ public class MetroServer extends Thread{
     public MetroCardBank getBank() {
         return bank;
     }
+
     public static void main(String[] args) {
         MetroServer srv = new MetroServer(7891);
         srv.start();
@@ -37,22 +38,23 @@ public class MetroServer extends Thread{
                 ch.start();
             }
         } catch (IOException e) {
-            if(isStopped){
+            if (isStopped) {
                 System.out.println("Server stopped!");
                 return;
             }
             System.out.println("Error: " + e);
         } finally {
-            try {
-                serverSocket.close();
-                System.out.println("Metro Server stopped");
-            } catch (IOException ex) {
-                System.out.println("Error: " + ex);
-            }
+            stopServer();
+            System.out.println("Metro Server stopped");
         }
     }
-    public synchronized void stopServer() throws IOException {
-        isStopped = true;
-        serverSocket.close();
+
+    public synchronized void stopServer() {
+        try {
+            serverSocket.close();
+            isStopped = true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
