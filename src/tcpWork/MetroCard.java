@@ -62,4 +62,7 @@ public class MetroCard {
                 '}';
     }
 
+    public void setBalance(int i) {
+        this.balance = i;
+    }
 }

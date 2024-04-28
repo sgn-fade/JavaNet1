@@ -3,8 +3,12 @@ package tcpWork;
 import java.util.ArrayList;
 
 public class MetroCardBank {
-    private ArrayList<MetroCard> store;
 
+
+    private ArrayList<MetroCard> store;
+    public ArrayList<MetroCard> getStore() {
+        return store;
+    }
     public MetroCardBank() {
         store = new ArrayList<>();
     }
