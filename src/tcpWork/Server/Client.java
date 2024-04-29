@@ -1,24 +1,21 @@
-package tcpWork;
+package tcpWork.Server;
+
+import tcpWork.Data.User;
+import tcpWork.Operations.*;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class Client {
-    private int port = -1;
-    private String server = null;
-    private Socket socket = null;
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
 
     public Client(String server, int port) {
-        this.port = port;
-        this.server = server;
         try {
-            socket = new Socket();
+            Socket socket = new Socket();
             socket.connect(new InetSocketAddress(server, port), 3000);
             os = new ObjectOutputStream(socket.getOutputStream());
             is = new ObjectInputStream(socket.getInputStream());
@@ -56,7 +53,6 @@ public class Client {
         op.getCrd().setBalance(25);
         cl.applyOperation(op);
         cl.finish();
-        //
         cl = new Client("localhost", 7891);
         cl.applyOperation(new AddMoneyOperation("00001", 100));
         cl.applyOperation(new ShowBalanceOperation("00001"));

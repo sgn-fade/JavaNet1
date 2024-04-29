@@ -1,4 +1,4 @@
-package tcpWork;
+package tcpWork.Data;
 
 import java.io.Serializable;
 

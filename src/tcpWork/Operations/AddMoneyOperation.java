@@ -1,8 +1,8 @@
-package tcpWork;
+package tcpWork.Operations;
 
 public class AddMoneyOperation extends CardOperation{
-    private String serNum = null;
-    private double money = 0.0;
+    private String serNum;
+    private double money;
     public AddMoneyOperation(String serNum, double money) {
         this.serNum = serNum;
         this.money = money;

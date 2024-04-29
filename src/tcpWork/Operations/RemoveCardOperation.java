@@ -1,11 +1,11 @@
-package tcpWork;
+package tcpWork.Operations;
 
-public class ShowBalanceOperation extends CardOperation{
+public class RemoveCardOperation extends CardOperation{
     private String serNum = null;
-    public ShowBalanceOperation(String serNum) {
+    public RemoveCardOperation(String serNum) {
         this.serNum = serNum;
     }
-    public ShowBalanceOperation() {
+    public RemoveCardOperation() {
     }
     public String getSerNum() {
         return serNum;

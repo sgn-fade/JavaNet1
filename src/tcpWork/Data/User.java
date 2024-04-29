@@ -1,4 +1,4 @@
-package tcpWork;
+package tcpWork.Data;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -9,7 +9,6 @@ import java.util.Date;
 public class User implements Serializable {
     private static final DateFormat dateFormatter =
             new SimpleDateFormat("dd.MM.yyyy");
-    private static final DateFormat dateParser = dateFormatter;
     private String name;
     private String surName;
     private String sex;
@@ -20,7 +19,7 @@ public class User implements Serializable {
         this.surName = surName;
         this.sex = sex;
         try {
-            this.birthday = dateParser.parse(birthday);
+            this.birthday = dateFormatter.parse(birthday);
         } catch (ParseException e) {
             System.out.println("Error: " + e);
         }
@@ -69,7 +68,7 @@ public class User implements Serializable {
 
     public void setBirthday(String birthday) {
         try {
-            this.birthday = dateParser.parse(birthday);
+            this.birthday = dateFormatter.parse(birthday);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

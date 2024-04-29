@@ -1,4 +1,4 @@
-package tcpWork;
+package tcpWork.Operations;
 
 public class FullInfoMetroCardOperation {
     private String serNum = null;

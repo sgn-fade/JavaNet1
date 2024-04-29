@@ -1,8 +1,9 @@
-package tcpWork;
+package tcpWork.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MetroCardBank {
+public class MetroCardBank implements Serializable {
 
 
     private ArrayList<MetroCard> store;
@@ -20,6 +21,7 @@ public class MetroCardBank {
         }
         return -1;
     }
+
     public int numCards() {
         return store.size();
     }

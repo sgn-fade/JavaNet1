@@ -1,9 +1,10 @@
-package tcpWork;
+package tcpWork.Server;
+
+import tcpWork.Data.MetroCardBank;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class MetroServer extends Thread {
     MetroCardBank bank;

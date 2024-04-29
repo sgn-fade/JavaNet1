@@ -1,4 +1,7 @@
-package tcpWork;
+package tcpWork.Server;
+
+import tcpWork.Data.MetroCardBank;
+import tcpWork.Operations.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,26 +11,26 @@ import java.net.Socket;
 public class ClientHandler extends Thread{
     private ObjectInputStream is = null;
     private ObjectOutputStream os = null;
-    private boolean work = true;
-    private MetroCardBank bnk = null;
-    private Socket s = null;
+    private boolean isStopped;
+    private final MetroCardBank cardBank;
+    private final Socket socket;
 
-    public ClientHandler(MetroCardBank bnk, Socket s) {
-        this.bnk = bnk;
-        this.s = s;
-        this.work = true;
+    public ClientHandler(MetroCardBank bnk, Socket socket) {
+        this.cardBank = bnk;
+        this.socket = socket;
+        this.isStopped = false;
         try {
-            this.is = new ObjectInputStream(s.getInputStream());
-            this.os = new ObjectOutputStream(s.getOutputStream());
+            this.is = new ObjectInputStream(socket.getInputStream());
+            this.os = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
     }
     @Override
     public void run() {
-        synchronized (bnk) {
-            System.out.println("Client Handler Started for: " + s);
-            while (work) {
+        synchronized (cardBank) {
+            System.out.println("Client Handler Started for: " + socket);
+            while (!isStopped) {
                 Object obj;
                 try {
                     obj = is.readObject();
@@ -37,13 +40,14 @@ public class ClientHandler extends Thread{
                 }
             }
             try {
-                System.out.println("Client Handler Stopped for: " + s);
-                s.close();
+                System.out.println("Client Handler Stopped for: " + socket);
+                socket.close();
             } catch (IOException ex) {
                 System.out.println("Error: " + ex);
             }
         }
     }
+    //command pattern
     private void processOperation(Object obj) throws
             IOException, ClassNotFoundException {
         if (obj instanceof StopOperation) {
@@ -65,20 +69,20 @@ public class ClientHandler extends Thread{
         }
     }
     private void finish() throws IOException {
-        work = false;
-        os.writeObject("Finish Work " + s);
+        isStopped = true;
+        os.writeObject("Finish Work " + socket);
         os.flush();
     }
     private void addCard(Object obj)
             throws IOException, ClassNotFoundException {
-        bnk.addCard(((AddMetroCardOperation) obj).getCrd());
+        cardBank.addCard(((AddMetroCardOperation) obj).getCrd());
         os.writeObject("Card Added");
         os.flush();
     }
     private void addMoney(Object obj)
             throws IOException, ClassNotFoundException {
         AddMoneyOperation op = (AddMoneyOperation) obj;
-        boolean res = bnk.addMoney(op.getSerNum(), op.getMoney());
+        boolean res = cardBank.addMoney(op.getSerNum(), op.getMoney());
         if (res) {
             os.writeObject("Balance Added");
             os.flush();
@@ -90,7 +94,7 @@ public class ClientHandler extends Thread{
     private void payMoney(Object obj)
             throws IOException, ClassNotFoundException {
         PayMoneyOperation op = (PayMoneyOperation) obj;
-        boolean res = bnk.getMoney(op.getSerNum(), op.getMoney());
+        boolean res = cardBank.getMoney(op.getSerNum(), op.getMoney());
         if (res) {
             os.writeObject("Money Payed");
             os.flush();
@@ -102,7 +106,7 @@ public class ClientHandler extends Thread{
     private void removeCard(Object obj)
             throws IOException, ClassNotFoundException {
         RemoveCardOperation op = (RemoveCardOperation) obj;
-        boolean res = bnk.removeCard(op.getSerNum());
+        boolean res = cardBank.removeCard(op.getSerNum());
         if (res) {
             os.writeObject("Metro Card Succesfully Remove: " + op.getSerNum());
             os.flush();
@@ -114,10 +118,10 @@ public class ClientHandler extends Thread{
     private void showBalance(Object obj)
             throws IOException, ClassNotFoundException {
         ShowBalanceOperation op = (ShowBalanceOperation) obj;
-        int ind = bnk.findMetroCard(op.getSerNum());
+        int ind = cardBank.findMetroCard(op.getSerNum());
         if (ind >= 0) {
             os.writeObject("Card : " + op.getSerNum() + " balance: "
-                    + bnk.getStore().get(ind).getBalance());
+                    + cardBank.getStore().get(ind).getBalance());
             os.flush();
         } else {
             os.writeObject("Cannot Show Balance for Card: " + op.getSerNum());
@@ -125,9 +129,9 @@ public class ClientHandler extends Thread{
     }
     private void cardInfo(Object obj) throws IOException, ClassNotFoundException {
         FullInfoMetroCardOperation op = (FullInfoMetroCardOperation) obj;
-        int ind = bnk.findMetroCard(op.getSerNum());
+        int ind = cardBank.findMetroCard(op.getSerNum());
         if (ind >= 0) {
-            os.writeObject(bnk.getStore().get(ind).toString());
+            os.writeObject(cardBank.getStore().get(ind).toString());
             os.flush();
         } else {
             os.writeObject("Cannot Show Balance for Card: " + op.getSerNum());
