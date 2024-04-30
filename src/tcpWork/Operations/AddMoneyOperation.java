@@ -1,5 +1,7 @@
 package tcpWork.Operations;
 
+import tcpWork.Data.MetroCardBank;
+
 public class AddMoneyOperation extends CardOperation{
     private String serNum;
     private double money;
@@ -21,5 +23,10 @@ public class AddMoneyOperation extends CardOperation{
     }
     public void setSerNum(String serNum) {
         this.serNum = serNum;
+    }
+    @Override
+    public String execute(MetroCardBank bank) {
+        if(bank.addMoney(serNum, money)) return "Money added";
+        return "Cannot add money";
     }
 }

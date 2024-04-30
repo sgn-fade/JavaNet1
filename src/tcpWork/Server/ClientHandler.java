@@ -52,18 +52,8 @@ public class ClientHandler extends Thread{
             IOException, ClassNotFoundException {
         if (obj instanceof StopOperation) {
             finish();
-        } else if (obj instanceof AddMetroCardOperation) {
-            addCard(obj);
-        } else if (obj instanceof AddMoneyOperation) {
-            addMoney(obj);
-        } else if (obj instanceof PayMoneyOperation) {
-            payMoney(obj);
-        } else if (obj instanceof RemoveCardOperation) {
-            removeCard(obj);
-        } else if (obj instanceof ShowBalanceOperation) {
-            showBalance(obj);
-        } else if (obj instanceof FullInfoMetroCardOperation) {
-            cardInfo(obj);
+        } else if (obj instanceof CardOperation) {
+            os.writeObject(((CardOperation) obj).execute(cardBank));
         } else {
             error();
         }
@@ -72,70 +62,6 @@ public class ClientHandler extends Thread{
         isStopped = true;
         os.writeObject("Finish Work " + socket);
         os.flush();
-    }
-    private void addCard(Object obj)
-            throws IOException, ClassNotFoundException {
-        cardBank.addCard(((AddMetroCardOperation) obj).getCrd());
-        os.writeObject("Card Added");
-        os.flush();
-    }
-    private void addMoney(Object obj)
-            throws IOException, ClassNotFoundException {
-        AddMoneyOperation op = (AddMoneyOperation) obj;
-        boolean res = cardBank.addMoney(op.getSerNum(), op.getMoney());
-        if (res) {
-            os.writeObject("Balance Added");
-            os.flush();
-        } else {
-            os.writeObject("Cannot Balance Added");
-            os.flush();
-        }
-    }
-    private void payMoney(Object obj)
-            throws IOException, ClassNotFoundException {
-        PayMoneyOperation op = (PayMoneyOperation) obj;
-        boolean res = cardBank.getMoney(op.getSerNum(), op.getMoney());
-        if (res) {
-            os.writeObject("Money Payed");
-            os.flush();
-        } else {
-            os.writeObject("Cannot Pay Money");
-            os.flush();
-        }
-    }
-    private void removeCard(Object obj)
-            throws IOException, ClassNotFoundException {
-        RemoveCardOperation op = (RemoveCardOperation) obj;
-        boolean res = cardBank.removeCard(op.getSerNum());
-        if (res) {
-            os.writeObject("Metro Card Succesfully Remove: " + op.getSerNum());
-            os.flush();
-        } else {
-            os.writeObject("Cannot Remove Card" + op.getSerNum());
-            os.flush();
-        }
-    }
-    private void showBalance(Object obj)
-            throws IOException, ClassNotFoundException {
-        ShowBalanceOperation op = (ShowBalanceOperation) obj;
-        int ind = cardBank.findMetroCard(op.getSerNum());
-        if (ind >= 0) {
-            os.writeObject("Card : " + op.getSerNum() + " balance: "
-                    + cardBank.getStore().get(ind).getBalance());
-            os.flush();
-        } else {
-            os.writeObject("Cannot Show Balance for Card: " + op.getSerNum());
-        }
-    }
-    private void cardInfo(Object obj) throws IOException, ClassNotFoundException {
-        FullInfoMetroCardOperation op = (FullInfoMetroCardOperation) obj;
-        int ind = cardBank.findMetroCard(op.getSerNum());
-        if (ind >= 0) {
-            os.writeObject(cardBank.getStore().get(ind).toString());
-            os.flush();
-        } else {
-            os.writeObject("Cannot Show Balance for Card: " + op.getSerNum());
-        }
     }
     private void error() throws IOException {
         os.writeObject("Bad Operation");

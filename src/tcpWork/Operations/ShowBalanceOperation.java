@@ -1,5 +1,7 @@
 package tcpWork.Operations;
 
+import tcpWork.Data.MetroCardBank;
+
 public class ShowBalanceOperation extends CardOperation{
     private String serNum = null;
     public ShowBalanceOperation(String serNum) {
@@ -12,5 +14,9 @@ public class ShowBalanceOperation extends CardOperation{
     }
     public void setSerNum(String serNum) {
         this.serNum = serNum;
+    }
+    @Override
+    public String execute(MetroCardBank bank) {
+        return bank.getCardInfo(serNum);
     }
 }

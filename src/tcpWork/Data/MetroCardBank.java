@@ -37,6 +37,9 @@ public class MetroCardBank implements Serializable {
     public boolean getMoney(String serNum, double money){
         return store.get(findMetroCard(serNum)).changeBalance(-money);
     }
+    public String getCardInfo(String serNum){
+        return store.get(findMetroCard(serNum)).toString();
+    }
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("List of MetroCards:");
