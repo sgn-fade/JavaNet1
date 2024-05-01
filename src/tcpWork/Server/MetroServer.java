@@ -21,10 +21,6 @@ public class MetroServer extends Thread {
         return bank;
     }
 
-    public static void main(String[] args) {
-        MetroServer srv = new MetroServer(7891);
-        srv.start();
-    }
 
     @Override
     public void run() {

@@ -1,5 +1,7 @@
 package tcpWork.Operations;
 
-public class StopOperation {
+import java.io.Serializable;
+
+public class StopOperation implements Serializable {
 }
 

@@ -43,20 +43,4 @@ public class Client {
             System.out.println("Error: " + ex);
         }
     }
-
-    public static void main(String[] args) {
-        Client cl = new Client("localhost", 7891);
-        AddMetroCardOperation op = new AddMetroCardOperation();
-        op.getCrd().setUsr(new User("Petr", "Petrov", "M", "25.12.1968"));
-        op.getCrd().setSerNum("00001");
-        op.getCrd().setColledge("KhNU");
-        op.getCrd().setBalance(25);
-        cl.applyOperation(op);
-        cl.finish();
-        cl = new Client("localhost", 7891);
-        cl.applyOperation(new AddMoneyOperation("00001", 100));
-        cl.applyOperation(new ShowBalanceOperation("00001"));
-        cl.finish();
-    }
-
 }

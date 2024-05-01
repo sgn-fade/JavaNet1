@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class MetroCard implements Serializable {
     private String serNum;
     private User usr;
-    private String colledge;
+    private String college;
     private double balance;
 
     public String getSerNum() {
@@ -24,12 +24,12 @@ public class MetroCard implements Serializable {
         this.usr = usr;
     }
 
-    public String getColledge() {
-        return colledge;
+    public String getCollege() {
+        return college;
     }
 
-    public void setColledge(String colledge) {
-        this.colledge = colledge;
+    public void setCollege(String college) {
+        this.college = college;
     }
 
     public double getBalance() {
@@ -44,10 +44,10 @@ public class MetroCard implements Serializable {
         return true;
     }
 
-    public MetroCard(String serNum, User usr, String colledge, double balance) {
+    public MetroCard(String serNum, User usr, String college, double balance) {
         this.serNum = serNum;
         this.usr = usr;
-        this.colledge = colledge;
+        this.college = college;
         this.balance = balance;
     }
 
@@ -59,7 +59,7 @@ public class MetroCard implements Serializable {
         return "MetroCard{" +
                 "serNum='" + serNum + '\'' +
                 ", usr=" + usr +
-                ", colledge='" + colledge + '\'' +
+                ", colledge='" + college + '\'' +
                 ", balance=" + balance +
                 '}';
     }
